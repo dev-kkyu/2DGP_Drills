@@ -50,7 +50,7 @@ def draw_circle():
 	angle = angle - 1
 	if angle <= -360:
 		angle = 1
-	if angle == -90:
+	if angle < -89 and angle > -91:
 		flag = True
 		direct = 0
 		x = 400
