@@ -15,8 +15,6 @@ def render_frame(x, y):
 def run_circle():
 	print('CIRCLE')
 
-	# 일단 그림을 그리자
-
 	cx, cy, r = 400, 300, 200
 
 	for deg in range(0, 360, 3):
@@ -44,7 +42,5 @@ def run_rectangle():
 while True:
 	run_rectangle()
 	run_circle()
-	break
-
 
 close_canvas()
