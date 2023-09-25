@@ -34,31 +34,48 @@ def handle_events():
 				diry -= 1
 			elif event.key == SDLK_DOWN:
 				diry += 1
-# 404 898
+
 def animate_sheet(state):
-	global x, y, frame
+	global x, y, frame, minus
 	if state == 'idle':
 		frame = frame % 3
 		character.clip_draw(23 + (frame * 33), 546, 33, 36, x, y, 80, 85)
-		delay(0.05)
-		pass
+		frame += 1
 	elif state == 'right':
 		frame = frame % 10
 		character.clip_draw(45 + (frame * 30), 799, 30, 27, x, y, 80, 75)
-		pass
+		frame += 1
 	elif state == 'left':
 		frame = frame % 10
 		character.clip_composite_draw(45 + (frame * 30), 799, 30, 27, 0, 'h', x, y, 80, 75)
-		pass
+		frame += 1
 	elif state == 'up':
-		pass
+		frame = frame % 4
+		character.clip_draw(44 + (frame * 34), 431, 28, 32, x, y, 80, 85)
+		if minus:
+			frame -= 1
+			if frame <= 0:
+				minus = False
+		else:
+			frame += 1
+			if frame >= 3:
+				minus = True
 	elif state == 'down':
-		pass
-	frame += 1
+		frame = frame % 4
+		character.clip_draw(8 + (frame * 33), 109, 30, 27, x, y, 80, 70)
+		if minus:
+			frame -= 1
+			if frame <= 0:
+				minus = False
+		else:
+			frame += 1
+			if frame >= 3:
+				minus = True
 
 running = True
 x, y = TUK_WIDTH // 2, TUK_HEIGHT // 2
 dirx, diry = 0, 0
+minus = False
 frame = 0
 
 while running:
@@ -80,6 +97,14 @@ while running:
 	handle_events()
 	x += dirx * 10
 	y += diry * 10
+	if x >= TUK_WIDTH - 30:
+		x = TUK_WIDTH - 31
+	elif x < 30:
+		x = 30
+	if y >= TUK_HEIGHT - 30:
+		y = TUK_HEIGHT - 31
+	elif y < 30:
+		y = 30
 	delay(0.05)
 
 close_canvas()
