@@ -23,7 +23,7 @@ def handle_events():
 
 def find_dest():
 	global is_arrived, mouse_list
-	global x, y, t
+	global x, y, t, look
 	global start_x, start_y, end_x, end_y
 
 	if is_arrived == True:
@@ -34,6 +34,10 @@ def find_dest():
 			end_y = mouse_list[0][1]
 			is_arrived = False
 			t = 0
+			if start_x < end_x:
+				look = 'right'
+			elif start_x > end_x:
+				look = 'left'
 
 
 def go_hand():
@@ -50,9 +54,11 @@ def go_hand():
 		t += (1 / length)
 
 	if t > 1:
+		x, y = end_x, end_y
 		if mouse_list:
 			del mouse_list[0]
 		is_arrived = True
+
 
 running = True
 x, y = TUK_WIDTH // 2, TUK_HEIGHT // 2
@@ -62,8 +68,9 @@ end_x, end_y = x, y
 is_arrived = True
 look = 'right'
 frame = 0
+frame_time = 30
 mouse_list = []
-# hide_cursor()
+
 
 while running:
 	clear_canvas()
@@ -71,9 +78,12 @@ while running:
 
 	for m in mouse_list:
 		hand_img.clip_draw(0, 0, 50, 52, m[0], m[1])
-	character.clip_draw(frame * 100, 100 * 1, 100, 100, x, y)
+	if look == 'right':
+		character.clip_draw((frame // frame_time) * 100, 100 * 1, 100, 100, x, y)
+	elif look == 'left':
+		character.clip_draw((frame // frame_time) * 100, 100 * 0, 100, 100, x, y)
 	update_canvas()
-	frame = (frame + 1) % 8
+	frame = (frame + 1) % (frame_time * 8)
 
 	find_dest()
 	go_hand()
@@ -81,7 +91,5 @@ while running:
 	handle_events()
 
 close_canvas()
-
-
 
 
