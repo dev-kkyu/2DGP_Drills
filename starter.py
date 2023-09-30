@@ -16,8 +16,6 @@ def handle_events():
 	for event in events:
 		if event.type == SDL_QUIT:
 			running = False
-		# elif event.type == SDL_MOUSEMOTION:
-		#     x, y = event.x, TUK_HEIGHT - 1 - event.y
 		elif event.type == SDL_KEYDOWN:
 			if event.key == SDLK_ESCAPE:
 				running = False
@@ -50,8 +48,6 @@ def go_hand():
 		is_arrived = True
 
 
-
-
 running = True
 x, y = TUK_WIDTH // 2, TUK_HEIGHT // 2
 rx, ry = x, y
@@ -59,12 +55,13 @@ is_arrived = True
 look = 'right'
 frame = 0
 frame_time = 30
-# hide_cursor()
+
 
 while running:
 	clear_canvas()
 	TUK_ground.draw(TUK_WIDTH // 2, TUK_HEIGHT // 2)
-	hand_img.clip_composite_draw(0, 0, 50, 52, 0, 'n', rx, ry)
+	# hand_img.clip_composite_draw(0, 0, 50, 52, 0, 'n', rx, ry)
+	hand_img.clip_draw(0, 0, 50, 52, rx, ry)
 	if look == 'right':
 		character.clip_draw((frame // frame_time) * 100, 100 * 1, 100, 100, x, y)
 	elif look == 'left':
@@ -76,8 +73,6 @@ while running:
 
 	handle_events()
 
+
 close_canvas()
-
-
-
 
