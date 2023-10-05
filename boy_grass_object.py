@@ -12,6 +12,7 @@ class Grass:
     def update(self):
         pass
 
+
 class Boy:
     def __init__(self):
         self.x, self.y = 0, 90
