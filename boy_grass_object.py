@@ -47,7 +47,7 @@ class Ball:
             self.y = self.width + 60
 
     def draw(self):
-        self.image.draw(x, y)
+        self.image.draw(self.x, self.y)
 
 
 
@@ -65,6 +65,7 @@ def reset_world():
     global running
     global grass
     global team
+    global balls
     global world
 
     running = True
@@ -75,6 +76,9 @@ def reset_world():
 
     team = [Boy() for i in range(11)]
     world += team
+
+    balls = [Ball() for i in range(20)]
+    world += balls
 
 
 def update_world():
