@@ -129,6 +129,20 @@ class Zombie:
         return BehaviorTree.SUCCESS
         pass
 
+    def ball_count_less_than_boy(self):
+        if self.ball_count < play_mode.boy.ball_count:
+            return BehaviorTree.SUCCESS
+        else:
+            return BehaviorTree.FAIL
+
+    def reverse_move_to_boy(self, r=7):
+        self.state = 'Walk'
+        self.move_slightly_to(2 * self.x - play_mode.boy.x, 2 * self.y - play_mode.boy.y)
+        if self.is_boy_nearby(r):
+            return BehaviorTree.RUNNING
+        else:
+            return BehaviorTree.SUCCESS
+
     def build_behavior_tree(self):
         a1 = Action('Set target location', self.set_target_location, 500, 50) # action node 생성
         a2 = Action('Move to', self.move_to)
@@ -148,7 +162,21 @@ class Zombie:
 
         a5 = Action('순찰 위치 가져오기', self.get_patrol_location)
 
-        root = SEQ_patrol = Sequence('순찰', a5, a2)
+        SEQ_patrol = Sequence('순찰', a5, a2)
 
+
+        c2 = Condition('소년보다 공이 적은가', self.ball_count_less_than_boy)
+
+        a5 = Action('소년의 반대방향으로 이동', self.reverse_move_to_boy, 7)
+
+        SEQ_run_away_boy = Sequence('소년에게서 도망침', c2, a5)
+
+        SEL_run_away_or_chase = Selector('도망 또는 추적', SEQ_run_away_boy, a4)
+
+        SEQ_interact_boy = Sequence('소년과 상호작용', c1, SEL_run_away_or_chase)
+
+        SEL_run_away_or_chase_or_wander = Selector('소년과 상호작용 또는 배회', SEQ_interact_boy, SEQ_wander)
+
+        root = SEL_run_away_or_chase_or_wander
 
         self.bt = BehaviorTree(root)
